@@ -9,5 +9,7 @@ import Foundation
 import UIKit
 
 class MyView: UIView {
-    
+    func boo() {
+        print("asd")
+    }
 }
