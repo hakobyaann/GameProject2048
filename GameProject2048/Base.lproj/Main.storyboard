@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="43" translatesAutoresizingMaskIntoConstraints="NO" id="ags-vs-XmO">
-                                        <rect key="frame" x="77.666666666666686" y="273.66666666666669" width="238" height="212"/>
+                                        <rect key="frame" x="112.66666666666669" y="273.66666666666669" width="168" height="212"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHW-zV-Nb4">
                                                 <rect key="frame" x="0.0" y="0.0" width="238" height="42"/>
