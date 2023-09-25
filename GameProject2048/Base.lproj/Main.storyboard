@@ -204,13 +204,7 @@ Rules
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xC1-aE-Olz"/>
-                        <color key="backgroundColor" red="0.99869972470000001" green="0.90802198649999999" blue="0.74428731199999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstItem="xC1-aE-Olz" firstAttribute="bottom" secondItem="6Ce-xx-wYt" secondAttribute="bottom" id="3Bd-wV-TAC"/>
-                            <constraint firstItem="xC1-aE-Olz" firstAttribute="trailing" secondItem="6Ce-xx-wYt" secondAttribute="trailing" id="Tfs-4r-dfF"/>
-                            <constraint firstItem="6Ce-xx-wYt" firstAttribute="top" secondItem="xC1-aE-Olz" secondAttribute="top" id="h3l-qR-SQu"/>
-                            <constraint firstItem="6Ce-xx-wYt" firstAttribute="leading" secondItem="xC1-aE-Olz" secondAttribute="leading" id="l4c-ZE-tgM"/>
-                        </constraints>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="wX2-eT-wbd"/>
                     <nil key="simulatedTopBarMetrics"/>
