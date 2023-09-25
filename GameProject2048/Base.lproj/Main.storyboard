@@ -36,7 +36,7 @@
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="43" translatesAutoresizingMaskIntoConstraints="NO" id="ags-vs-XmO">
-                                        <rect key="frame" x="77.666666666666686" y="273.66666666666669" width="238" height="212"/>
+                                        <rect key="frame" x="112.66666666666669" y="273.66666666666669" width="168" height="212"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHW-zV-Nb4">
                                                 <rect key="frame" x="0.0" y="0.0" width="168" height="42"/>
@@ -131,7 +131,7 @@
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Fwd-zQ-t7n">
                                                 <rect key="frame" x="0.0" y="0.0" width="373" height="690"/>
                                                 <color key="backgroundColor" red="0.99869972470000001" green="0.90802198649999999" blue="0.74428731199999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <mutableString key="text">Introduction
+                                                <string key="text">Introduction
 2048 is a simple yet addictive puzzle game in which your goal is to combine numbered tiles to reach the ultimate tile with the value of 2048. The game is played on a 4x4 grid, and you can move tiles in four directions: up, down, left, and right. The game ends when you can't make any more moves or when you reach the 2048 tile.
 Rules
 * 		Grid: The game is played on a 4x4 grid, initially populated with two tiles, each with a value of 2 or 4.
@@ -139,7 +139,7 @@ Rules
 * 		Combining Tiles: When two tiles with the same value touch while moving in any direction, they merge into a single tile with their sum. For example, two tiles with a value of 2 will merge into a single tile with a value of 4.
 * 		Scoring: Your score increases by the value of each tile you merge. Merging two tiles with a value of 4 will increase your score by 8.
 * 		Winning: The game is won when you successfully create a tile with a value of 2048. However, you can continue playing to achieve higher scores.
-* 		Losing: The game ends when you can't make any more valid moves, and the grid is full. You lose if you can't create a 2048 tile or achieve your desired high score.</mutableString>
+* 		Losing: The game ends when you can't make any more valid moves, and the grid is full. You lose if you can't create a 2048 tile or achieve your desired high score.</string>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
                                                 <color key="textColor" red="0.6507524233656089" green="0.5365998391904776" blue="0.375307710624736" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="highlightedColor" red="0.99869972470000001" green="0.90802198649999999" blue="0.74428731199999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
@@ -191,8 +191,9 @@ Rules
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6Ce-xx-wYt">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6Ce-xx-wYt">
                                 <rect key="frame" x="0.0" y="59" width="393" height="759"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" red="0.99869972470000001" green="0.90802198649999999" blue="0.74428731199999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2048" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="tLJ-nD-yDg">
@@ -204,7 +205,7 @@ Rules
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="xC1-aE-Olz"/>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <color key="backgroundColor" red="0.98431372640000003" green="0.91372549530000002" blue="0.76470589639999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </view>
                     <navigationItem key="navigationItem" id="wX2-eT-wbd"/>
                     <nil key="simulatedTopBarMetrics"/>
@@ -218,9 +219,6 @@ Rules
         <segue reference="skY-ho-GuB"/>
     </inferredMetricsTieBreakers>
     <resources>
-        <systemColor name="systemBackgroundColor">
-            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-        </systemColor>
         <systemColor name="systemBrownColor">
             <color red="0.63529411764705879" green="0.51764705882352946" blue="0.36862745098039218" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>

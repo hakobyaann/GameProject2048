@@ -45,7 +45,9 @@ final class GameModel{
     }
     
     
-    
+    func addition(){
+        
+    }
     
     
     
