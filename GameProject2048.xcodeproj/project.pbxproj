@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		0565DF102AC1DC610052B08E /* GameModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0565DF0F2AC1DC610052B08E /* GameModel.swift */; };
 		957BA84F2AB8943B0070C5FF /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957BA84E2AB8943B0070C5FF /* AppDelegate.swift */; };
 		957BA8512AB8943B0070C5FF /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957BA8502AB8943B0070C5FF /* SceneDelegate.swift */; };
 		957BA8532AB8943B0070C5FF /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957BA8522AB8943B0070C5FF /* ViewController.swift */; };
@@ -36,6 +37,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		0565DF0F2AC1DC610052B08E /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		05899DD12AC5E26A0099D5EE /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
 		957BA84B2AB8943B0070C5FF /* GameProject2048.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameProject2048.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		957BA84E2AB8943B0070C5FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		957BA8502AB8943B0070C5FF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -100,12 +103,14 @@
 			isa = PBXGroup;
 			children = (
 				957BA84E2AB8943B0070C5FF /* AppDelegate.swift */,
+				05899DD12AC5E26A0099D5EE /* .gitignore.md */,
 				957BA8502AB8943B0070C5FF /* SceneDelegate.swift */,
 				957BA8522AB8943B0070C5FF /* ViewController.swift */,
 				957BA8542AB8943B0070C5FF /* Main.storyboard */,
 				957BA8572AB8943D0070C5FF /* Assets.xcassets */,
 				957BA8592AB8943D0070C5FF /* LaunchScreen.storyboard */,
 				957BA85C2AB8943D0070C5FF /* Info.plist */,
+				0565DF0F2AC1DC610052B08E /* GameModel.swift */,
 			);
 			path = GameProject2048;
 			sourceTree = "<group>";
@@ -259,6 +264,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				957BA8532AB8943B0070C5FF /* ViewController.swift in Sources */,
+				0565DF102AC1DC610052B08E /* GameModel.swift in Sources */,
 				957BA84F2AB8943B0070C5FF /* AppDelegate.swift in Sources */,
 				957BA8512AB8943B0070C5FF /* SceneDelegate.swift in Sources */,
 			);
