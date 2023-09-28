@@ -8,12 +8,14 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    let gameModel = GameModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        gameModel.test()
     }
-
+    
 
 }
 
