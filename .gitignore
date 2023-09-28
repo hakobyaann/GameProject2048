@@ -1,3 +1,6 @@
 
 GameProject2048.xcodeproj/xcuserdata/milenamirumyan.xcuserdatad/xcschemes/xcschememanagement.plist
 GameProject2048.xcodeproj/project.xcworkspace/xcuserdata/milenamirumyan.xcuserdatad/UserInterfaceState.xcuserstate
+*.xcuserstate
+*.xcbkptlist
+.DS_Store
