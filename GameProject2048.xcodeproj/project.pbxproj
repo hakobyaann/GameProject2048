@@ -41,6 +41,7 @@
 
 /* Begin PBXFileReference section */
 		0565DF0F2AC1DC610052B08E /* GameModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModel.swift; sourceTree = "<group>"; };
+		05899DD12AC5E26A0099D5EE /* .gitignore.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = .gitignore.md; sourceTree = "<group>"; };
 		957BA84B2AB8943B0070C5FF /* GameProject2048.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GameProject2048.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		957BA84E2AB8943B0070C5FF /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		957BA8502AB8943B0070C5FF /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -109,6 +110,7 @@
 			children = (
 				95EB165E2AC86DC600E0AB7C /* RandomBlocksModel.swift */,
 				957BA84E2AB8943B0070C5FF /* AppDelegate.swift */,
+				05899DD12AC5E26A0099D5EE /* .gitignore.md */,
 				957BA8502AB8943B0070C5FF /* SceneDelegate.swift */,
 				957BA8522AB8943B0070C5FF /* ViewController.swift */,
 				959656A52AC43579004ADEBF /* UIViewBlock.swift */,
