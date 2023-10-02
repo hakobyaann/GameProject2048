@@ -12,7 +12,13 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+//        var tes = RandomBlocksModel()
+//        tes.test()
+//        tes.test()
+//        tes.test()
     }
+    
+    
 
 
 }
