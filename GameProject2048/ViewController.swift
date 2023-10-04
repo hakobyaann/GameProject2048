@@ -16,6 +16,9 @@ class ViewController: UIViewController {
 //        tes.test()
 //        tes.test()
 //        tes.test()
+        var modl = GameModel()
+        modl.save()
+        modl.retrieveSaved()
     }
     
     
