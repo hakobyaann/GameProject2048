@@ -40,7 +40,7 @@ final class RandomBlocksModel {
     
     func generateRandomNumber() -> Int {
         let minExponent = 1 // Minimum exponent (2^1 = 2)
-        let maxExponent = 11 // Maximum exponent (2^11 = 2048)
+//        let maxExponent = 11 // Maximum exponent (2^11 = 2048)
 
         let randomExponent = Int.random(in: minExponent...target! - 1) //random exponent for generating the final random number which will be the power of 2
         

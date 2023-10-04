@@ -241,7 +241,7 @@ Rules
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="BYZ-38-t0r" kind="show" id="jEP-oj-Wa4"/>
+                                                    <action selector="menu:" destination="Rx6-dQ-V3j" eventType="touchUpInside" id="Z0G-if-0zE"/>
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Join the numbers and get to the 2048 tile!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sWa-07-eeS">
@@ -326,6 +326,8 @@ Rules
                         <outlet property="bestScore" destination="gJ3-Oy-Uy5" id="qsV-Xc-EMD"/>
                         <outlet property="board" destination="PzD-Vt-Ow1" id="4Va-pI-fCh"/>
                         <outlet property="currentScore" destination="ejt-vd-8Rq" id="nXH-Ba-0pn"/>
+                        <outlet property="mainView" destination="6Ce-xx-wYt" id="ml0-Aj-aG4"/>
+                        <outlet property="menuButton" destination="JWH-OT-3oU" id="O5B-re-lxS"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IVb-WL-twA" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -335,7 +337,6 @@ Rules
     </scenes>
     <inferredMetricsTieBreakers>
         <segue reference="skY-ho-GuB"/>
-        <segue reference="jEP-oj-Wa4"/>
     </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBrownColor">
