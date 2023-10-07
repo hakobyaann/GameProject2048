@@ -21,11 +21,11 @@ final class UIGameBoardController: UIViewController {
     private let spacing: CGFloat = 10.0
     private var gameMatrix: [[BlockView]]!
     var backgroundMatrix: [[UIView]] = []
+    var gameModel = GameModel()
     
-    var matrix = RandomBlocksModel()
     
     //for knowing which block is the user's highest, to not let generate a block higher then the current target
-//    private var targetBlock: Int?
+    //    private var targetBlock: Int?
     
     @IBAction func menu(_ sender: Any) {
         createMenuBar()
@@ -35,12 +35,91 @@ final class UIGameBoardController: UIViewController {
         super.viewDidLoad()
         createMatrixBackground()
         createMatrix()
-//        targetBlock = 2
+        //        targetBlock = 2
         
-        matrix.generateNewNumberForMatrix()
-        matrix.generateNewNumberForMatrix()
-
+        gameModel.generateNewNumberForMatrix()
+        gameModel.generateNewNumberForMatrix()
+        
         updateMatrix()
+        
+        //swipeGestures
+        let swipeGestureLeft = UISwipeGestureRecognizer(target: self, action: #selector(swipeLeft))
+        let swipeGestureRight = UISwipeGestureRecognizer(target: self, action: #selector(swipeRight))
+        let swipeGestureUp = UISwipeGestureRecognizer(target: self, action: #selector(swipeUp))
+        let swipeGestureDown = UISwipeGestureRecognizer(target: self, action: #selector(swipeDown))
+        
+        swipeGestureLeft.direction = .left
+        swipeGestureRight.direction = .right
+        swipeGestureUp.direction = .up
+        swipeGestureDown.direction = .down
+        
+        board.addGestureRecognizer(swipeGestureLeft)
+        board.addGestureRecognizer(swipeGestureRight)
+        board.addGestureRecognizer(swipeGestureUp)
+        board.addGestureRecognizer(swipeGestureDown)
+        
+        
+    }
+    
+    @objc func swipeLeft(){
+        gameModel.additionLeft()
+        // gameModel.generateNewNumberForMatrix()
+        currentScore.text = "\(gameModel.score)"
+        updateMatrix()
+        for i in 0..<rows {
+            for j in 0..<columns {
+                let value = gameModel.matrix[i][j]
+                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
+                print(value, separator: separator)
+            }
+        }
+        
+    }
+    
+    @objc func swipeRight(){
+        gameModel.additionRight()
+        // gameModel.generateNewNumberForMatrix()
+        currentScore.text = "\(gameModel.score)"
+        print("before updating")
+        for i in 0..<rows {
+            for j in 0..<columns {
+                let value = gameModel.matrix[i][j]
+                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
+                print(value, separator: separator)
+            }
+        }
+        updateMatrix()
+        print("after updating")
+        for i in 0..<rows {
+            for j in 0..<columns {
+                let value = gameModel.matrix[i][j]
+                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
+                print(value, separator: separator)
+            }
+        }
+        
+    }
+    
+    @objc func swipeUp(){
+        gameModel.additionTop()
+        //   gameModel.generateNewNumberForMatrix()
+        currentScore.text = "\(gameModel.score)"
+        updateMatrix()
+        for i in 0..<rows {
+            for j in 0..<columns {
+                let value = gameModel.matrix[i][j]
+                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
+                print(value, separator: separator)
+            }
+        }
+        
+    }
+    
+    @objc func swipeDown(){
+        gameModel.additionBottom()
+        currentScore.text = "\(gameModel.score)"
+        updateMatrix()
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -59,7 +138,6 @@ final class UIGameBoardController: UIViewController {
         overlayView.addSubview(buttons)
         buttons.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            
             buttons.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
             buttons.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor),
             // You can add more constraints as needed to position the stack view vertically.
@@ -69,7 +147,7 @@ final class UIGameBoardController: UIViewController {
         menuBar = overlayView
         
     }
-
+    
     
     //creating background for the main matrix
     func createMatrixBackground() {
@@ -117,35 +195,33 @@ final class UIGameBoardController: UIViewController {
         if let imagePlay = UIImage(named: "play") {
             playButton.setImage(imagePlay.withRenderingMode(.alwaysOriginal), for: .normal)
         }
-            let buttonSize: CGFloat = 100.0
-            
+        let buttonSize: CGFloat = 100.0
         
-            restartButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-                restartButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
-
-                homeButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-                homeButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
-
-                playButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
-                playButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        restartButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        restartButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        
+        homeButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        homeButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        
+        playButton.widthAnchor.constraint(equalToConstant: buttonSize).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: buttonSize).isActive = true
         
         let buttons = UIStackView()
         buttons.axis = .horizontal
         buttons.alignment = .fill
         buttons.distribution = .fillEqually
         buttons.spacing = 20
-        print("Hi")
         buttons.addArrangedSubview(restartButton)
         buttons.addArrangedSubview(homeButton)
         buttons.addArrangedSubview(playButton)
-            restartButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            restartButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-            homeButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            homeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
-            playButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
-            playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        restartButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        restartButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        homeButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        homeButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
+        playButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
         playButton.addTarget(self, action: #selector(continuePlaying), for: .touchUpInside)
         homeButton.addTarget(self, action: #selector(dismissing), for: .touchUpInside)
@@ -170,19 +246,16 @@ final class UIGameBoardController: UIViewController {
     @objc func restarting(_ sender: UIButton) {
         for row in 0..<rows {
             for col in 0..<columns  {
-                if matrix.matrixX[row][col] != 0 {
-                    matrix.matrixX[row][col] = 0
+                if gameModel.matrix[row][col].id.number != 0 {
+                    gameModel.matrix[row][col].id.number = 0
                 }
                 gameMatrix[row][col].image.image = nil
-                print(matrix.matrixX[row][col])
-
+                
             }
-            print()
         }
-        print("after restarting")
         updateMatrix()
-        matrix.generateNewNumberForMatrix()
-        matrix.generateNewNumberForMatrix()
+        gameModel.generateNewNumberForMatrix()
+        gameModel.generateNewNumberForMatrix()
         updateMatrix()
         if let view = menuBar {
             view.removeFromSuperview()
@@ -213,17 +286,15 @@ final class UIGameBoardController: UIViewController {
     func updateMatrix() {
         for row in 0..<rows {
             for col in 0..<columns  {
-                if matrix.matrixX[row][col] != 0 {
+                if gameModel.matrix[row][col].id.number != 0 {
                     let block = gameMatrix[row][col]
-                    if let image = UIImage(named: "\(matrix.matrixX[row][col])") {
+                    if let image = UIImage(named: "\(gameModel.matrix[row][col].id.number)") {
                         block.image.image = image
                     }
-                    gameMatrix[row][col] = block
-                    print(matrix.matrixX[row][col])
+                } else {
+                    let block = gameMatrix[row][col]
+                    block.image.image = nil
                 }
-                print()
             }
         }
-    }
-    
-}
+    }}
