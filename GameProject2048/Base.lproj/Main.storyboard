@@ -48,7 +48,7 @@
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                                 </state>
                                                 <connections>
-                                                    <segue destination="Rx6-dQ-V3j" kind="show" id="skY-ho-GuB"/>
+                                                    <action selector="keepGoing:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sj8-v2-mi0"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5h-36-aQc">
@@ -187,7 +187,7 @@ Rules
         <!--Game Board Controller-->
         <scene sceneID="7DS-Q0-jTd">
             <objects>
-                <viewController id="Rx6-dQ-V3j" customClass="UIGameBoardController" customModule="GameProject2048" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="gameViewController" id="Rx6-dQ-V3j" customClass="UIGameBoardController" customModule="GameProject2048" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="05j-80-xxh">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -335,9 +335,6 @@ Rules
             <point key="canvasLocation" x="1095.6521739130435" y="36.160714285714285"/>
         </scene>
     </scenes>
-    <inferredMetricsTieBreakers>
-        <segue reference="skY-ho-GuB"/>
-    </inferredMetricsTieBreakers>
     <resources>
         <systemColor name="systemBrownColor">
             <color red="0.63529411759999999" green="0.51764705879999995" blue="0.36862745099999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

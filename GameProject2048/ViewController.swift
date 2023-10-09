@@ -8,16 +8,19 @@
 import UIKit
 
 class ViewController: UIViewController {
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-//        var tes = RandomBlocksModel()
-//        tes.test()
-//        tes.test()
-//        tes.test()
-        var game = GameModel()
-        game.test()
+        
+    }
+    @IBAction func keepGoing(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "gameViewController") as! UIGameBoardController
+        
+        vc.shouldKeepGoing = true
+        show(vc, sender: nil)
+
+        
     }
     
     
