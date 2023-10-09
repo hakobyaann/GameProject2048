@@ -19,7 +19,6 @@
 		957BA8722AB8943D0070C5FF /* GameProject2048UITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 957BA8712AB8943D0070C5FF /* GameProject2048UITestsLaunchTests.swift */; };
 		959656A62AC43579004ADEBF /* UIViewBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959656A52AC43579004ADEBF /* UIViewBlock.swift */; };
 		959656A82AC456CD004ADEBF /* UIGameBoardController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 959656A72AC456CD004ADEBF /* UIGameBoardController.swift */; };
-		95EB165F2AC86DC600E0AB7C /* RandomBlocksModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EB165E2AC86DC600E0AB7C /* RandomBlocksModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,7 +56,6 @@
 		957BA8712AB8943D0070C5FF /* GameProject2048UITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameProject2048UITestsLaunchTests.swift; sourceTree = "<group>"; };
 		959656A52AC43579004ADEBF /* UIViewBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewBlock.swift; sourceTree = "<group>"; };
 		959656A72AC456CD004ADEBF /* UIGameBoardController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIGameBoardController.swift; sourceTree = "<group>"; };
-		95EB165E2AC86DC600E0AB7C /* RandomBlocksModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomBlocksModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -108,7 +106,6 @@
 		957BA84D2AB8943B0070C5FF /* GameProject2048 */ = {
 			isa = PBXGroup;
 			children = (
-				95EB165E2AC86DC600E0AB7C /* RandomBlocksModel.swift */,
 				957BA84E2AB8943B0070C5FF /* AppDelegate.swift */,
 				05899DD12AC5E26A0099D5EE /* .gitignore.md */,
 				957BA8502AB8943B0070C5FF /* SceneDelegate.swift */,
@@ -276,7 +273,6 @@
 				957BA8532AB8943B0070C5FF /* ViewController.swift in Sources */,
 				0565DF102AC1DC610052B08E /* GameModel.swift in Sources */,
 				957BA84F2AB8943B0070C5FF /* AppDelegate.swift in Sources */,
-				95EB165F2AC86DC600E0AB7C /* RandomBlocksModel.swift in Sources */,
 				959656A82AC456CD004ADEBF /* UIGameBoardController.swift in Sources */,
 				957BA8512AB8943B0070C5FF /* SceneDelegate.swift in Sources */,
 			);

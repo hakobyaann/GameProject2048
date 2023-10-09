@@ -22,24 +22,31 @@ final class UIGameBoardController: UIViewController {
     private var gameMatrix: [[BlockView]]!
     var backgroundMatrix: [[UIView]] = []
     var gameModel = GameModel()
-    
-    
-    //for knowing which block is the user's highest, to not let generate a block higher then the current target
-    //    private var targetBlock: Int?
+    var shouldKeepGoing: Bool = false
     
     @IBAction func menu(_ sender: Any) {
         createMenuBar()
     }
+
+    func keepGoing(){
+        gameModel.retrieveSaved()
+    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         createMatrixBackground()
         createMatrix()
-        //        targetBlock = 2
         
-        gameModel.generateNewNumberForMatrix()
-        gameModel.generateNewNumberForMatrix()
-        
+        if !shouldKeepGoing {
+            gameModel.generateNewNumberForMatrix()
+            gameModel.generateNewNumberForMatrix()
+        }
+        if shouldKeepGoing {
+            keepGoing()
+        }
         updateMatrix()
         
         //swipeGestures
@@ -58,61 +65,39 @@ final class UIGameBoardController: UIViewController {
         board.addGestureRecognizer(swipeGestureUp)
         board.addGestureRecognizer(swipeGestureDown)
         
+//        let appWasTerminated = Notification.Name("AppWasTerminated")
+//        NotificationCenter.default.post(name: appWasTerminated, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleTermination), name: appWasTerminated, object: nil)
+        
+        NotificationCenter.default.addObserver(self, 
+                                               selector: #selector(handleTermination),
+                                               name: UIApplication.didEnterBackgroundNotification,
+                                               object: nil)
         
     }
     
+    @objc func handleTermination(){
+        print("guppy")
+        gameModel.save()
+    }
+    
+    //MARK: functions for swiping/addition
     @objc func swipeLeft(){
         gameModel.additionLeft()
-        // gameModel.generateNewNumberForMatrix()
         currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        for i in 0..<rows {
-            for j in 0..<columns {
-                let value = gameModel.matrix[i][j]
-                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
-                print(value, separator: separator)
-            }
-        }
-        
     }
     
     @objc func swipeRight(){
         gameModel.additionRight()
-        // gameModel.generateNewNumberForMatrix()
         currentScore.text = "\(gameModel.score)"
-        print("before updating")
-        for i in 0..<rows {
-            for j in 0..<columns {
-                let value = gameModel.matrix[i][j]
-                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
-                print(value, separator: separator)
-            }
-        }
         updateMatrix()
-        print("after updating")
-        for i in 0..<rows {
-            for j in 0..<columns {
-                let value = gameModel.matrix[i][j]
-                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
-                print(value, separator: separator)
-            }
-        }
-        
     }
     
     @objc func swipeUp(){
         gameModel.additionTop()
-        //   gameModel.generateNewNumberForMatrix()
         currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        for i in 0..<rows {
-            for j in 0..<columns {
-                let value = gameModel.matrix[i][j]
-                let separator = j == columns - 1 ? "\n" : "  " // Use a newline at the end of each row
-                print(value, separator: separator)
-            }
-        }
-        
     }
     
     @objc func swipeDown(){
@@ -239,6 +224,10 @@ final class UIGameBoardController: UIViewController {
     //homeButton tap action
     @objc func dismissing(_ sender: UIButton) {
         //savingalgorythm()
+        gameModel.save()
+//        gameModel.retrieveSaved(){
+//            updateSaved()
+//        }
         self.navigationController?.popViewController(animated: true)
     }
     
@@ -246,12 +235,10 @@ final class UIGameBoardController: UIViewController {
     @objc func restarting(_ sender: UIButton) {
         for row in 0..<rows {
             for col in 0..<columns  {
-                if gameModel.matrix[row][col].id.number != 0 {
-                    gameModel.matrix[row][col].id.number = 0
+                if gameModel.matrix[row][col].number != 0 {
+                    gameModel.matrix[row][col].number = 0
                 }
-                gameMatrix[row][col].image.image = nil
-                
-            }
+                gameMatrix[row][col].image.image = nil            }
         }
         updateMatrix()
         gameModel.generateNewNumberForMatrix()
@@ -286,9 +273,9 @@ final class UIGameBoardController: UIViewController {
     func updateMatrix() {
         for row in 0..<rows {
             for col in 0..<columns  {
-                if gameModel.matrix[row][col].id.number != 0 {
+                if gameModel.matrix[row][col].number != 0 {
                     let block = gameMatrix[row][col]
-                    if let image = UIImage(named: "\(gameModel.matrix[row][col].id.number)") {
+                    if let image = UIImage(named: "\(gameModel.matrix[row][col].number)") {
                         block.image.image = image
                     }
                 } else {
@@ -297,4 +284,22 @@ final class UIGameBoardController: UIViewController {
                 }
             }
         }
-    }}
+    }
+//    }
+//    
+//    func updateSaved(){
+//        for row in 0..<rows {
+//            for col in 0..<columns  {
+//                if gameModel.retrievedMatrix[row][col].number != 0 {
+//                    let block = gameMatrix[row][col]
+//                    if let image = UIImage(named: "\(gameModel.retrievedMatrix[row][col].number)") {
+//                        block.image.image = image
+//                    }
+//                } else {
+//                    let block = gameMatrix[row][col]
+//                    block.image.image = nil
+//                }
+//            }
+//        }
+//    }
+}
