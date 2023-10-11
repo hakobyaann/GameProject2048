@@ -284,6 +284,9 @@ final class UIGameBoardController: UIViewController {
                 }
             }
         }
+        if gameModel.checking() && gameModel.emptyCoordinates.isEmpty {
+            
+        }
     }
 //    }
 //    
@@ -302,4 +305,5 @@ final class UIGameBoardController: UIViewController {
 //            }
 //        }
 //    }
+    
 }

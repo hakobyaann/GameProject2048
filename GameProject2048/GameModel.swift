@@ -255,6 +255,25 @@ final class GameModel{
             }
         }
     }
+    
+    func checking() -> Bool {
+            for col in 0..<matrix.count {
+                for row in 1..<matrix.count - 1 {
+                    if matrix[col][row].number != matrix[col][row + 1].number {
+                        return false
+                    }
+                }
+                for col in 0..<matrix.count - 1{
+                    for row in 1..<matrix.count {
+                        if matrix[col][row].number != matrix[col][row + 1].number {
+                            return false
+                        }
+                    }
+                }
+            }
+            return true
+        }
+
 }
 
 
