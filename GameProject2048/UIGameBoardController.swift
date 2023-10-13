@@ -13,7 +13,7 @@ final class UIGameBoardController: UIViewController {
     @IBOutlet weak var bestScore: UILabel!
     @IBOutlet weak var currentScore: UILabel!
     @IBOutlet weak var mainView: UIView!
-    
+    var menuBar: UIView? = nil
     
     //for drawing a matrix on the board
     private let columns = 4
@@ -23,18 +23,13 @@ final class UIGameBoardController: UIViewController {
     var backgroundMatrix: [[UIView]] = []
     var gameModel = GameModel()
     var shouldKeepGoing: Bool = false
-    var lostBar: UIView? = nil
-    var winBar: UIView? = nil
-    var menuBar: UIView? = nil
     
     @IBAction func menu(_ sender: Any) {
         createMenuBar()
     }
-    
-    func keepGoing() {
+
+    func keepGoing(){
         gameModel.retrieveSaved()
-        bestScore.text = "\(gameModel.bestScore)"
-        currentScore.text = "\(gameModel.score)"
     }
     
     
@@ -52,8 +47,6 @@ final class UIGameBoardController: UIViewController {
         if shouldKeepGoing {
             keepGoing()
         }
-        
-        scoresTracking()
         updateMatrix()
         
         //swipeGestures
@@ -72,61 +65,45 @@ final class UIGameBoardController: UIViewController {
         board.addGestureRecognizer(swipeGestureUp)
         board.addGestureRecognizer(swipeGestureDown)
         
-        NotificationCenter.default.addObserver(self,
+//        let appWasTerminated = Notification.Name("AppWasTerminated")
+//        NotificationCenter.default.post(name: appWasTerminated, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(handleTermination), name: appWasTerminated, object: nil)
+        
+        NotificationCenter.default.addObserver(self, 
                                                selector: #selector(handleTermination),
                                                name: UIApplication.didEnterBackgroundNotification,
                                                object: nil)
+        
     }
     
-    @objc func handleTermination() {
+    @objc func handleTermination(){
+        print("guppy")
         gameModel.save()
     }
     
-    func scoresTracking() {
-        currentScore.text = "\(gameModel.score)"
-        bestScore.text = "\(gameModel.bestScore)"
-    }
-    
     //MARK: functions for swiping/addition
-    @objc func swipeLeft() {
+    @objc func swipeLeft(){
         gameModel.additionLeft()
-        scoresTracking()
+        currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        
-        //checking whether the game needs to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() && gameModel.emptyCoordinates.isEmpty {
-            createLostBar()
-        }
     }
     
-    @objc func swipeRight() {
+    @objc func swipeRight(){
         gameModel.additionRight()
-        scoresTracking()
+        currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
-        }
     }
     
-    @objc func swipeUp() {
+    @objc func swipeUp(){
         gameModel.additionTop()
-        scoresTracking()
+        currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
-        }
     }
     
-    @objc func swipeDown() {
+    @objc func swipeDown(){
         gameModel.additionBottom()
-        scoresTracking()
+        currentScore.text = "\(gameModel.score)"
         updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
-        }
         
     }
     
@@ -161,7 +138,7 @@ final class UIGameBoardController: UIViewController {
     func createMatrixBackground() {
         for _ in 0..<rows {
             var rowArray: [UIView] = []
-            for _ in 0..<columns {
+            for _ in 0..<columns  {
                 let block = UIView()
                 block.backgroundColor = .white.withAlphaComponent(0.5)
                 board.addSubview(block)
@@ -179,7 +156,7 @@ final class UIGameBoardController: UIViewController {
         let blockHeight = (board.bounds.height - spacingHeight) / CGFloat(rows)
         
         for row in 0..<rows {
-            for column in 0..<columns {
+            for column in 0..<columns  {
                 let x = CGFloat(column) * (blockWidth + spacing)
                 let y = CGFloat(row) * (blockHeight + spacing)
                 let block = matrix[row][column]
@@ -246,33 +223,28 @@ final class UIGameBoardController: UIViewController {
     }
     //homeButton tap action
     @objc func dismissing(_ sender: UIButton) {
+        //savingalgorythm()
         gameModel.save()
+//        gameModel.retrieveSaved(){
+//            updateSaved()
+//        }
         self.navigationController?.popViewController(animated: true)
     }
     
     //restartButton tap action
     @objc func restarting(_ sender: UIButton) {
-        gameModel.score = 0
-        currentScore.text = "\(gameModel.score)"
         for row in 0..<rows {
             for col in 0..<columns  {
                 if gameModel.matrix[row][col].number != 0 {
                     gameModel.matrix[row][col].number = 0
                 }
-                gameMatrix[row][col].image.image = nil
-            }
+                gameMatrix[row][col].image.image = nil            }
         }
         updateMatrix()
         gameModel.generateNewNumberForMatrix()
         gameModel.generateNewNumberForMatrix()
         updateMatrix()
         if let view = menuBar {
-            view.removeFromSuperview()
-        }
-        if let view = lostBar {
-            view.removeFromSuperview()
-        }
-        if let view = winBar {
             view.removeFromSuperview()
         }
     }
@@ -299,7 +271,6 @@ final class UIGameBoardController: UIViewController {
     }
     
     func updateMatrix() {
-//        scoresTracking()
         for row in 0..<rows {
             for col in 0..<columns  {
                 if gameModel.matrix[row][col].number != 0 {
@@ -314,74 +285,21 @@ final class UIGameBoardController: UIViewController {
             }
         }
     }
-    
-    func createWinBar() {
-        let overlayView = UIView(frame: UIScreen.main.bounds)
-        overlayView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
-        self.view.addSubview(overlayView)
-        let youWon = UILabel()
-        youWon.text = "You Won!"
-        
-        youWon.translatesAutoresizingMaskIntoConstraints = false
-        overlayView.addSubview(youWon)
-        
-        youWon.font = youWon.font.withSize(33)
-        let button = UIButton(type: .system)
-        if let image = UIImage(named:"restart") {
-            button.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-        overlayView.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor)
-        ]   )
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        NSLayoutConstraint.activate([
-            youWon.topAnchor.constraint(equalTo: button.topAnchor, constant: -40)
-        ])
-        youWon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        button.clipsToBounds = false
-        winBar = overlayView
-        
-        button.addTarget(self, action: #selector(restarting), for: .touchUpInside)
-        
-    }
-    
-    func createLostBar() {
-        let overlayView = UIView(frame: UIScreen.main.bounds)
-        overlayView.backgroundColor = UIColor.red.withAlphaComponent(0.5)
-        self.view.addSubview(overlayView)
-        // Create buttons
-        let youLost = UILabel()
-        youLost.text = "You Lost!"
-        
-        youLost.translatesAutoresizingMaskIntoConstraints = false
-        overlayView.addSubview(youLost)
-        
-        youLost.font = UIFont.systemFont(ofSize: 33, weight: .semibold)
-        
-        let button = UIButton(type: .system)
-        if let image = UIImage(named:"restart") {
-            button.setImage(image.withRenderingMode(.alwaysOriginal), for: .normal)
-        }
-        overlayView.addSubview(button)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            button.centerXAnchor.constraint(equalTo: overlayView.centerXAnchor),
-            button.centerYAnchor.constraint(equalTo: overlayView.centerYAnchor)
-        ]   )
-        button.widthAnchor.constraint(equalToConstant: 100).isActive = true
-        button.heightAnchor.constraint(equalToConstant: 100).isActive = true
-        NSLayoutConstraint.activate([
-            youLost.topAnchor.constraint(equalTo: button.topAnchor, constant: -40)
-        ])
-        youLost.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        button.clipsToBounds = false
-        lostBar = overlayView
-        
-        button.addTarget(self, action: #selector(restarting), for: .touchUpInside)
-        
-    }
+//    }
+//    
+//    func updateSaved(){
+//        for row in 0..<rows {
+//            for col in 0..<columns  {
+//                if gameModel.retrievedMatrix[row][col].number != 0 {
+//                    let block = gameMatrix[row][col]
+//                    if let image = UIImage(named: "\(gameModel.retrievedMatrix[row][col].number)") {
+//                        block.image.image = image
+//                    }
+//                } else {
+//                    let block = gameMatrix[row][col]
+//                    block.image.image = nil
+//                }
+//            }
+//        }
+//    }
 }
