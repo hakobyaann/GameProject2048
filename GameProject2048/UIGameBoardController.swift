@@ -22,9 +22,11 @@ final class UIGameBoardController: UIViewController {
     var backgroundMatrix: [[UIView]] = []
     var gameModel = GameModel()
     var shouldKeepGoing: Bool = false
+    var shouldStartNewGame: Bool = false
     var lostBar: UIView? = nil
     var winBar: UIView? = nil
     var menuBar: UIView? = nil
+    var maxTileBlock: String? = nil
     
     @IBAction func menu(_ sender: Any) {
         createMenuBar()
@@ -36,11 +38,46 @@ final class UIGameBoardController: UIViewController {
         currentScore.text = "\(gameModel.score)"
     }
     
+    func newGame() {
+        if let highestScore = UserDefaults.standard.data(forKey: "savedBestScore"),
+           let decodedScore = try? JSONDecoder().decode(Int.self, from: highestScore) {
+            gameModel.bestScore = decodedScore
+        }
+        bestScore.text = "\(gameModel.bestScore)"
+        currentScore.text = "0"
+    }
+    
+    @objc func newGameAfterWin(_ sender: UIButton) {
+        gameModel.bestScore = 0
+        gameModel.score = 0
+        gameModel.maxTile = 0
+        
+        bestScore.text = "\(gameModel.bestScore)"
+        currentScore.text = "\(gameModel.score)"
+        
+        for col in 0..<columns {
+            for row in 0..<rows {
+                gameModel.matrix[col][row].number = 0
+            }
+        }
+        updateMatrix()
+        gameModel.generateNewNumberForMatrix()
+        gameModel.generateNewNumberForMatrix()
+        updateMatrix()
+        if let view = winBar {
+            view.removeFromSuperview()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         createMatrixBackground()
         createMatrix()
+        
+        if shouldStartNewGame {
+            newGame()
+        }
         
         if !shouldKeepGoing {
             gameModel.generateNewNumberForMatrix()
@@ -87,6 +124,9 @@ final class UIGameBoardController: UIViewController {
     //MARK: functions for swiping/addition
     @objc func swipeLeft() {
         gameModel.additionLeft()
+        if gameModel.maxTile == 2048 {
+            createWinBar()
+        }
         scoresTracking()
         updateMatrix()
         
@@ -98,6 +138,9 @@ final class UIGameBoardController: UIViewController {
     
     @objc func swipeRight() {
         gameModel.additionRight()
+        if gameModel.maxTile == 2048 {
+            createWinBar()
+        }
         scoresTracking()
         updateMatrix()
         //checking whether the game need to be teminated or not (Lose! or continue)
@@ -108,6 +151,9 @@ final class UIGameBoardController: UIViewController {
     
     @objc func swipeUp() {
         gameModel.additionTop()
+        if gameModel.maxTile == 2048 {
+            createWinBar()
+        }
         scoresTracking()
         updateMatrix()
         //checking whether the game need to be teminated or not (Lose! or continue)
@@ -118,13 +164,15 @@ final class UIGameBoardController: UIViewController {
     
     @objc func swipeDown() {
         gameModel.additionBottom()
+        if gameModel.maxTile == 2048 {
+            createWinBar()
+        }
         scoresTracking()
         updateMatrix()
         //checking whether the game need to be teminated or not (Lose! or continue)
         if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
             createLostBar()
         }
-
     }
     
     override func viewDidLayoutSubviews() {
@@ -231,7 +279,6 @@ final class UIGameBoardController: UIViewController {
         playButton.addTarget(self, action: #selector(continuePlaying), for: .touchUpInside)
         homeButton.addTarget(self, action: #selector(dismissing), for: .touchUpInside)
         restartButton.addTarget(self, action: #selector(restarting), for: .touchUpInside)
-        
         return buttons
     }
     
@@ -269,9 +316,6 @@ final class UIGameBoardController: UIViewController {
         if let view = lostBar {
             view.removeFromSuperview()
         }
-        if let view = winBar {
-            view.removeFromSuperview()
-        }
     }
     
     func setupBackground() {
@@ -296,7 +340,6 @@ final class UIGameBoardController: UIViewController {
     }
     
     func updateMatrix() {
-//        scoresTracking()
         for row in 0..<rows {
             for col in 0..<columns  {
                 if gameModel.matrix[row][col].number != 0 {
@@ -314,7 +357,7 @@ final class UIGameBoardController: UIViewController {
     
     func createWinBar() {
         let overlayView = UIView(frame: UIScreen.main.bounds)
-        overlayView.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        overlayView.backgroundColor = UIColor.systemYellow.withAlphaComponent(0.5)
         self.view.addSubview(overlayView)
         let youWon = UILabel()
         youWon.text = "You Won!"
@@ -341,9 +384,8 @@ final class UIGameBoardController: UIViewController {
         youWon.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         button.clipsToBounds = false
         winBar = overlayView
-        
-        button.addTarget(self, action: #selector(restarting), for: .touchUpInside)
-        
+        //adding behaviour to the button
+        button.addTarget(self, action: #selector(newGameAfterWin), for: .touchUpInside)
     }
     
     func createLostBar() {
@@ -377,8 +419,7 @@ final class UIGameBoardController: UIViewController {
         youLost.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         button.clipsToBounds = false
         lostBar = overlayView
-        
+        //adding behaviour to the button
         button.addTarget(self, action: #selector(restarting), for: .touchUpInside)
-        
     }
 }
