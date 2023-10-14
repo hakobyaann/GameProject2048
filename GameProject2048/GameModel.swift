@@ -12,7 +12,6 @@ struct Blocks: Codable {
     var number: Int
 }
 
-
 final class GameModel {
     
     var matrix: [[Blocks]] = []
@@ -23,13 +22,13 @@ final class GameModel {
     private var target: Int = 2
     private var matrixCopy: [[Blocks]] = []
     var retrievedMatrix: [[Blocks]] = []
-    
+    var maxTile: Int = 0
     init() {
         matrix = [
             [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
             [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
-            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
-            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)]
+            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 1024), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
+            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 1024), Blocks(isMerged: false, number: 0)]
         ]
         matrixCopy = matrix
     }
@@ -47,6 +46,7 @@ final class GameModel {
                     matrix[row][col - 1].number += matrix[row][col].number
                     matrix[row][col].number = 0
                     matrix[row][col - 1].isMerged = true
+                    checkMaxTile(matrix[row][col - 1].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                     score += matrix[row][col - 1].number
                     if score >= bestScore {
                         bestScore = score
@@ -57,6 +57,7 @@ final class GameModel {
                     matrix[row][col].number = 0
                     if col - 1 > 0 && matrix[row][col - 2].number == matrix[row][col - 1].number && !matrix[row][col - 2].isMerged && !matrix[row][col - 1].isMerged {
                         matrix[row][col - 2].number += matrix[row][col - 1].number
+                        checkMaxTile(matrix[row][col - 2].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row][col - 1].number = 0
                         score += matrix[row][col - 2].number
                         if score >= bestScore {
@@ -97,6 +98,7 @@ final class GameModel {
                     matrix[row][col + 1].number += matrix[row][col].number
                     matrix[row][col].number = 0
                     matrix[row][col + 1].isMerged = true
+                    checkMaxTile(matrix[row][col + 1].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                     score += matrix[row][col + 1].number
                     updateBestScore()
                 }
@@ -105,6 +107,7 @@ final class GameModel {
                     matrix[row][col].number = 0
                     if col + 1 < matrix.count - 1 && matrix[row][col + 2].number == matrix[row][col + 1].number && !matrix[row][col + 2].isMerged && !matrix[row][col + 1].isMerged {
                         matrix[row][col + 2].number += matrix[row][col + 1].number
+                        checkMaxTile(matrix[row][col + 2].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row][col + 1].number = 0
                         score += matrix[row][col + 2].number
                         updateBestScore()
@@ -137,6 +140,7 @@ final class GameModel {
                     matrix[row - 1][col].number += matrix[row][col].number
                     matrix[row][col].number = 0
                     matrix[row - 1][col].isMerged = true
+                    checkMaxTile(matrix[row - 1][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                     score += matrix[row - 1][col].number
                     updateBestScore()
                 }
@@ -145,6 +149,7 @@ final class GameModel {
                     matrix[row][col].number = 0
                     if row - 1 > 0 && matrix[row-2][col].number == matrix[row - 1][col].number && !matrix[row-2][col].isMerged && !matrix[row - 1][col].isMerged {
                         matrix[row - 2][col].number += matrix[row - 1][col].number
+                        checkMaxTile(matrix[row - 2][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row - 1][col].number = 0
                         score += matrix[row - 2][col].number
                         updateBestScore()
@@ -178,6 +183,7 @@ final class GameModel {
                     matrix[row + 1][col].number += matrix[row][col].number
                     matrix[row][col].number = 0
                     matrix[row + 1][col].isMerged = true
+                    checkMaxTile(matrix[row + 1][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                     score += matrix[row + 1][col].number
                     updateBestScore()
                 }
@@ -187,6 +193,7 @@ final class GameModel {
                     if row + 1 < matrix.count - 1 && matrix[row + 2][col].number == matrix[row + 1][col].number && !matrix[row + 2][col].isMerged && !matrix[row + 1][col].isMerged {
                         matrix[row + 2][col].number += matrix[row + 1][col].number
                         matrix[row + 1][col].number = 0
+                        checkMaxTile(matrix[row + 2][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         score += matrix[row + 2][col].number
                         updateBestScore()
                     }
@@ -206,11 +213,9 @@ final class GameModel {
         }
     }
     
-    
     //MARK: - Saving Algorithm
     func save() {  //keeping our matrix and best score in UserDefaults, so that when I kill my app and go back to it, I can have access on the matrix and best score
         savedMatrix = matrix
-        
         //saving the matrix
         let encoderForMatrix = JSONEncoder()
         if let data = try? encoderForMatrix.encode(savedMatrix) {
@@ -224,8 +229,12 @@ final class GameModel {
         //saving the current score
         let encoderForCurrentScore = JSONEncoder()
         if let data = try? encoderForCurrentScore.encode(score) {
-            print("OK with savecurrent")
             UserDefaults.standard.set(data, forKey: "CurrentScore")
+        }
+        //saving the max tile
+        let encoderForMaxTile = JSONEncoder()
+        if let data = try? encoderForMaxTile.encode(maxTile) {
+            UserDefaults.standard.set(data, forKey: "MaxTile")
         }
     }
     
@@ -239,14 +248,18 @@ final class GameModel {
         // for the best score
         if let highestScore = UserDefaults.standard.data(forKey: "savedBestScore"),
            let decodedScore = try? JSONDecoder().decode(Int.self, from: highestScore) {
-            print("OK with best")
             bestScore = decodedScore
         }
         //for the current score
         if let currentScore = UserDefaults.standard.data(forKey: "CurrentScore"),
            let decodedCScore = try? JSONDecoder().decode(Int.self, from: currentScore) {
-            print("OK with retreivecurrent")
             score = decodedCScore
+        }
+        
+        //for the max tile
+        if let max = UserDefaults.standard.data(forKey: "MaxTile"),
+           let decodedMaxTile = try? JSONDecoder().decode(Int.self, from: max) {
+            maxTile = decodedMaxTile
         }
     }
     
@@ -265,20 +278,24 @@ final class GameModel {
             return
         }
     }
-
+    
     func generateNewNumberForMatrix() {
         let number = 2 * Int.random(in: 1...2)
         generateRandomCoordinates() //emptyCoordinates
-        
         //generate random index within empty coordinates in matrix
         let randomIndex = Int.random(in: 0..<emptyCoordinates.count)
         let (row, column) = emptyCoordinates[randomIndex] //picking the coordinates
-        
         //adding the number into matrix
         matrix[row][column].number = number
     }
     
     //MARK: Helper Methods
+    func checkMaxTile(_ number: Int) {
+        if maxTile < number {
+            maxTile = number
+        }
+    }
+    
     //helper function to update my isMerged property after doing the addition
     func updateMerged() {
         for row in 0...matrix.count - 1 {
@@ -331,7 +348,6 @@ final class GameModel {
         }
         return true
     }
-    
 }
 
 

@@ -21,7 +21,10 @@ class ViewController: UIViewController {
         show(vc, sender: nil)
     }
     
-    
-
-
+    @IBAction func newGame(_ sender: Any) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "gameViewController") as! UIGameBoardController
+        vc.shouldStartNewGame = true
+        show(vc, sender: nil)
+    }
 }
