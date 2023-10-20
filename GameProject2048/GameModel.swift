@@ -7,9 +7,16 @@
 
 import Foundation
 
+struct Position: Codable {
+    let row: Int
+    let col: Int
+}
+
 struct Blocks: Codable {
     var isMerged: Bool
     var number: Int
+    var oldPosition: Position?
+    var oldPositionMerged: Position?
 }
 
 final class GameModel {
@@ -23,12 +30,13 @@ final class GameModel {
     private var matrixCopy: [[Blocks]] = []
     var retrievedMatrix: [[Blocks]] = []
     var maxTile: Int = 0
+
     init() {
         matrix = [
             [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
             [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
-            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 1024), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
-            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 1024), Blocks(isMerged: false, number: 0)]
+            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)],
+            [Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0), Blocks(isMerged: false, number: 0)]
         ]
         matrixCopy = matrix
     }
@@ -36,14 +44,19 @@ final class GameModel {
     //MARK: - Addition Left
     func additionLeft() {
         createCopyMatrix()
+        updateMerged()
+        
         for row in 0...matrix.count - 1 {
             for col in 0...matrix.count - 1 {
                 if matrix[row][col].number == 0 && col < matrix.count - 1 { //if my current element is 0, I have to switch it with my next element
                     matrix[row][col].number = matrix[row][col + 1].number
+                    matrix[row][col].oldPosition = matrix[row][col + 1].oldPosition
                     matrix[row][col + 1].number = 0
                 }
                 if col > 0 && matrix[row][col - 1].number == matrix[row][col].number { //if my previous element and my current element are the same, I have to add them and put on my previous element's index
                     matrix[row][col - 1].number += matrix[row][col].number
+                    matrix[row][col - 1].oldPositionMerged = matrix[row][col - 1].oldPosition
+                    matrix[row][col - 1].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     matrix[row][col - 1].isMerged = true
                     checkMaxTile(matrix[row][col - 1].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
@@ -54,9 +67,12 @@ final class GameModel {
                 }
                 if col > 0 && matrix[row][col - 1].number == 0 { //if my previous element is 0, I am bringing my current element to my previous element's place
                     matrix[row][col - 1].number = matrix[row][col].number
+                    matrix[row][col - 1].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     if col - 1 > 0 && matrix[row][col - 2].number == matrix[row][col - 1].number && !matrix[row][col - 2].isMerged && !matrix[row][col - 1].isMerged {
                         matrix[row][col - 2].number += matrix[row][col - 1].number
+                        matrix[row][col - 2].oldPositionMerged = matrix[row][col - 2].oldPosition
+                        matrix[row][col - 2].oldPosition = matrix[row][col - 1].oldPosition
                         checkMaxTile(matrix[row][col - 2].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row][col - 1].number = 0
                         score += matrix[row][col - 2].number
@@ -66,36 +82,30 @@ final class GameModel {
                     }
                     if col - 1 > 0 && matrix[row][col - 2].number == 0 {
                         matrix[row][col - 2].number = matrix[row][col - 1].number
+                        matrix[row][col - 2].oldPosition = matrix[row][col - 1].oldPosition
                         matrix[row][col - 1].number = 0
                     }
                 }
             }
-        }
-        updateMerged()
-        if hasChanged(matrix: matrix) {  //if adding to the left my matrix doesn't change I should not generate new random number
-            generateNewNumberForMatrix()
-        } else {
-            generateRandomCoordinates()
-        }
-    }
-    
-    func updateBestScore() {
-        if score >= bestScore {
-            bestScore = score
         }
     }
     
     //MARK: - Addition Right
     func additionRight() {
         createCopyMatrix()
+        updateMerged()
+        
         for row in 0...matrix.count - 1 {
             for col in stride(from: matrix.count - 1, to: -1, by: -1) { //if my current element is 0, I have to switch it with my previous element
                 if col > 0 && matrix[row][col].number == 0 {
                     matrix[row][col].number = matrix[row][col - 1].number
+                    matrix[row][col].oldPosition = matrix[row][col - 1].oldPosition
                     matrix[row][col - 1].number = 0
                 }
                 if col < matrix.count - 1 && matrix[row][col].number == matrix[row][col + 1].number { //if my next element and my current element are the same, I have to add them and put on my next element's index
                     matrix[row][col + 1].number += matrix[row][col].number
+                    matrix[row][col + 1].oldPositionMerged = matrix[row][col + 1].oldPosition
+                    matrix[row][col + 1].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     matrix[row][col + 1].isMerged = true
                     checkMaxTile(matrix[row][col + 1].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
@@ -104,9 +114,12 @@ final class GameModel {
                 }
                 if col < matrix.count - 1 && matrix[row][col + 1].number == 0 { //if my previous element is 0, I am bringing my current element under my next element's index
                     matrix[row][col + 1].number = matrix[row][col].number
+                    matrix[row][col + 1].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     if col + 1 < matrix.count - 1 && matrix[row][col + 2].number == matrix[row][col + 1].number && !matrix[row][col + 2].isMerged && !matrix[row][col + 1].isMerged {
                         matrix[row][col + 2].number += matrix[row][col + 1].number
+                        matrix[row][col + 2].oldPositionMerged = matrix[row][col + 2].oldPosition
+                        matrix[row][col + 2].oldPosition = matrix[row][col + 1].oldPosition
                         checkMaxTile(matrix[row][col + 2].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row][col + 1].number = 0
                         score += matrix[row][col + 2].number
@@ -114,30 +127,30 @@ final class GameModel {
                     }
                     if col + 2 < matrix.count && matrix[row][col + 2].number == 0 {
                         matrix[row][col + 2].number = matrix[row][col + 1].number
+                        matrix[row][col + 2].oldPosition = matrix[row][col + 1].oldPosition
                         matrix[row][col + 1].number = 0
                     }
                 }
             }
-        }
-        updateMerged()
-        if hasChanged(matrix: matrix) { //if adding to the right my matrix doesn't change I should not generate new random number
-            generateNewNumberForMatrix()
-        } else {
-            generateRandomCoordinates()
         }
     }
     
     //MARK: - Addition Top
     func additionTop() {
         createCopyMatrix()
+        updateMerged()
+        
         for col in 0...matrix.count - 1 { // going over the columns
             for row in 0...matrix.count - 1 {   //going over the rows
                 if matrix[row][col].number == 0 && row < matrix.count - 1 { //checking if my current element is 0 and if it is, I have to change my next row number to my current one
                     matrix[row][col].number = matrix[row + 1][col].number
+                    matrix[row][col].oldPosition = matrix[row + 1][col].oldPosition
                     matrix[row + 1][col].number = 0
                 }
                 if row > 0 && matrix[row - 1][col].number == matrix[row][col].number { //checking if my previous element is equal to my current element, adding them and setting to previous element's place
                     matrix[row - 1][col].number += matrix[row][col].number
+                    matrix[row - 1][col].oldPositionMerged = matrix[row - 1][col].oldPosition
+                    matrix[row - 1][col].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     matrix[row - 1][col].isMerged = true
                     checkMaxTile(matrix[row - 1][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
@@ -146,9 +159,12 @@ final class GameModel {
                 }
                 if row > 0 && matrix[row - 1][col].number == 0 { //checking if my previous element is 0, and switching their places
                     matrix[row - 1][col].number = matrix[row][col].number
+                    matrix[row - 1][col].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     if row - 1 > 0 && matrix[row-2][col].number == matrix[row - 1][col].number && !matrix[row-2][col].isMerged && !matrix[row - 1][col].isMerged {
                         matrix[row - 2][col].number += matrix[row - 1][col].number
+                        matrix[row - 2][col].oldPositionMerged = matrix[row - 2][col].oldPosition
+                        matrix[row - 2][col].oldPosition = matrix[row - 1][col].oldPosition
                         checkMaxTile(matrix[row - 2][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         matrix[row - 1][col].number = 0
                         score += matrix[row - 2][col].number
@@ -156,31 +172,31 @@ final class GameModel {
                     }
                     if row - 1 > 0 && matrix[row - 2][col].number == 0 {
                         matrix[row - 2][col].number = matrix[row - 1][col].number
+                        matrix[row - 2][col].oldPosition = matrix[row - 1][col].oldPosition
                         matrix[row - 1][col].number = 0
                         
                     }
                 } //thus, I covered all the possible cases
             }
         }
-        updateMerged()
-        if hasChanged(matrix: matrix) {  //if adding to the top my matrix doesn't change I should not generate new random number
-            generateNewNumberForMatrix()
-        } else {
-            generateRandomCoordinates()
-        }
     }
     
     //MARK: - Addition Bottom
     func additionBottom() {
         createCopyMatrix()
+        updateMerged()
+        
         for col in 0...matrix.count - 1 {  //going over the columns
             for row in stride(from: matrix.count - 1, to: -1, by: -1) { //going over the rows
                 if matrix[row][col].number == 0 && row > 0 { // checking if my current element is 0, and switching it with the previous one
                     matrix[row][col].number = matrix[row - 1][col].number
+                    matrix[row][col].oldPosition = matrix[row - 1][col].oldPosition
                     matrix[row - 1][col].number = 0
                 }
                 if row < matrix.count - 1 && matrix[row + 1][col].number == matrix[row][col].number { // checking if my current element is equal to my next one, I am adding those numbers and put them into my element
                     matrix[row + 1][col].number += matrix[row][col].number
+                    matrix[row + 1][col].oldPosition = matrix[row + 1][col].oldPosition
+                    matrix[row + 1][col].oldPositionMerged = matrix[row + 1][col].oldPosition
                     matrix[row][col].number = 0
                     matrix[row + 1][col].isMerged = true
                     checkMaxTile(matrix[row + 1][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
@@ -189,9 +205,12 @@ final class GameModel {
                 }
                 if row < matrix.count - 1 && matrix[row + 1][col].number == 0 { // checking if my next element is 0, I switch my current element with the next one
                     matrix[row + 1][col].number = matrix[row][col].number
+                    matrix[row + 1][col].oldPosition = matrix[row][col].oldPosition
                     matrix[row][col].number = 0
                     if row + 1 < matrix.count - 1 && matrix[row + 2][col].number == matrix[row + 1][col].number && !matrix[row + 2][col].isMerged && !matrix[row + 1][col].isMerged {
                         matrix[row + 2][col].number += matrix[row + 1][col].number
+                        matrix[row + 2][col].oldPositionMerged = matrix[row + 2][col].oldPosition
+                        matrix[row + 2][col].oldPosition = matrix[row + 1][col].oldPosition
                         matrix[row + 1][col].number = 0
                         checkMaxTile(matrix[row + 2][col].number) //checks if the merged block with its new value is higher than the max tile, and if it is so, it changes the max value the this new value
                         score += matrix[row + 2][col].number
@@ -199,20 +218,17 @@ final class GameModel {
                     }
                     if row + 2 < matrix.count && matrix[row + 2][col].number == 0 {
                         matrix[row + 2][col].number = matrix[row + 1][col].number
+                        matrix[row + 2][col].oldPosition = matrix[row + 1][col].oldPosition
                         matrix[row + 1][col].number = 0
                         
                     }
                 }
             }
         }
-        updateMerged()
-        if hasChanged(matrix: matrix) {  //if adding to the bottom my matrix doesn't change I should not generate new random number
-            generateNewNumberForMatrix()
-        } else {
-            generateRandomCoordinates()
-        }
+//        updateMerged()
+//        checkAndGenerate()
     }
-    
+        
     //MARK: - Saving Algorithm
     func save() {  //keeping our matrix and best score in UserDefaults, so that when I kill my app and go back to it, I can have access on the matrix and best score
         savedMatrix = matrix
@@ -279,7 +295,7 @@ final class GameModel {
         }
     }
     
-    func generateNewNumberForMatrix() {
+    func generateNewNumberForMatrix() -> Position {
         let number = 2 * Int.random(in: 1...2)
         generateRandomCoordinates() //emptyCoordinates
         //generate random index within empty coordinates in matrix
@@ -287,6 +303,7 @@ final class GameModel {
         let (row, column) = emptyCoordinates[randomIndex] //picking the coordinates
         //adding the number into matrix
         matrix[row][column].number = number
+        return Position(row: row, col: column)
     }
     
     //MARK: Helper Methods
@@ -301,11 +318,13 @@ final class GameModel {
         for row in 0...matrix.count - 1 {
             for col in 0...matrix.count - 1 {
                 matrix[row][col].isMerged = false
+                matrix[row][col].oldPosition = Position(row: row, col: col)
+                matrix[row][col].oldPositionMerged = nil
             }
         }
     }
     
-    // helper function to understand has my matrix changed or no
+    //helper function to understand has my matrix changed or no
     func hasChanged(matrix: [[Blocks]]) -> Bool {
         var answer = false
         for row in 0...matrix.count - 1 {
@@ -318,12 +337,28 @@ final class GameModel {
         return answer
     }
     
+    //helper method to update the best score if needed
+    func updateBestScore() {
+        if score >= bestScore {
+            bestScore = score
+        }
+    }
+    
     //helper method to create copy of my matrix at exact moment
     func createCopyMatrix() {
         for row in 0...matrix.count - 1 {
             for col in 0...matrix.count - 1 {
                 matrixCopy[row][col] = matrix[row][col]
             }
+        }
+    }
+    
+    func checkAndGenerate() -> Position? {
+        if hasChanged(matrix: matrix) {  //if adding to the bottom my matrix doesn't change I should not generate new random number
+            return generateNewNumberForMatrix()
+        } else {
+            generateRandomCoordinates() // generating random coordinates for updating
+            return nil
         }
     }
     
