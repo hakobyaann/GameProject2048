@@ -8,17 +8,41 @@
 import UIKit
 
 class ViewController: UIViewController {
+    @IBOutlet weak var newGame: UIButton!
+    @IBOutlet weak var howToPlay: UIButton!
+    @IBOutlet weak var keepGoingButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpView()
+    }
+    
+    func setUpView() {
+        newGame.layer.cornerRadius = 10 // Adjust the corner radius value as needed
+        newGame.layer.masksToBounds = true
+        howToPlay.layer.cornerRadius = 10
+        howToPlay.layer.masksToBounds = true
+        keepGoingButton.layer.cornerRadius = 10
+        keepGoingButton.layer.masksToBounds = true
     }
     
     @IBAction func keepGoing(_ sender: Any) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "gameViewController") as! UIGameBoardController
         
-        vc.shouldKeepGoing = true
-        show(vc, sender: nil)
+        if let _ = UserDefaults.standard.object(forKey: "savedBestScore"),
+           let _ = UserDefaults.standard.object(forKey: "savedMatrix"),
+           let _ = UserDefaults.standard.object(forKey: "MaxTile"),
+           let _ = UserDefaults.standard.object(forKey: "CurrentScore") {
+            // Code to handle the non-nil values
+            vc.shouldKeepGoing = true
+            show(vc, sender: nil)
+            keepGoingButton.isEnabled = true
+        } else {
+            // Code to handle the case where any of the values is nil
+            keepGoingButton.isEnabled = false
+        }
+        
     }
     
     @IBAction func newGame(_ sender: Any) {

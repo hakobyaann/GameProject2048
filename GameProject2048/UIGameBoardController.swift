@@ -27,6 +27,7 @@ final class UIGameBoardController: UIViewController {
     var winBar: UIView? = nil
     var menuBar: UIView? = nil
     var maxTileBlock: String? = nil
+    var block: BlockView? = nil
     
     @IBAction func menu(_ sender: Any) {
         createMenuBar()
@@ -123,55 +124,118 @@ final class UIGameBoardController: UIViewController {
     
     //MARK: functions for swiping/addition
     @objc func swipeLeft() {
+        board.isUserInteractionEnabled = false
         gameModel.additionLeft()
-        if gameModel.maxTile == 2048 {
-            createWinBar()
-        }
-        scoresTracking()
-        updateMatrix()
         
-        //checking whether the game needs to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() && gameModel.emptyCoordinates.isEmpty {
-            createLostBar()
+        doSwipeAnimations { [weak self] in
+            self?.doGenerationAnimations { [weak self] in
+                self?.winOrLose()
+                self?.board.isUserInteractionEnabled = true
+            }
         }
     }
     
     @objc func swipeRight() {
+        board.isUserInteractionEnabled = false
         gameModel.additionRight()
-        if gameModel.maxTile == 2048 {
-            createWinBar()
-        }
-        scoresTracking()
-        updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
+        
+        doSwipeAnimations { [weak self] in
+            self?.doGenerationAnimations { [weak self] in
+                self?.winOrLose()
+                self?.board.isUserInteractionEnabled = true
+            }
         }
     }
     
     @objc func swipeUp() {
+        board.isUserInteractionEnabled = false
         gameModel.additionTop()
-        if gameModel.maxTile == 2048 {
-            createWinBar()
-        }
-        scoresTracking()
-        updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
+        
+        doSwipeAnimations { [weak self] in
+            self?.doGenerationAnimations { [weak self] in
+                self?.winOrLose()
+                self?.board.isUserInteractionEnabled = true
+            }
         }
     }
     
     @objc func swipeDown() {
+        board.isUserInteractionEnabled = false
         gameModel.additionBottom()
-        if gameModel.maxTile == 2048 {
-            createWinBar()
+       
+        doSwipeAnimations { [weak self] in
+            self?.doGenerationAnimations { [weak self] in
+                self?.winOrLose()
+                self?.board.isUserInteractionEnabled = true
+            }
         }
-        scoresTracking()
-        updateMatrix()
-        //checking whether the game need to be teminated or not (Lose! or continue)
-        if gameModel.needToTerminate() == true && gameModel.emptyCoordinates.count == 0 {
-            createLostBar()
+    }
+    
+    func move(row: Int, col: Int, position: Position) {
+        let newBlockView = gameMatrix[row][col]
+        let oldBlockView = gameMatrix[position.row][position.col]
+        
+        let newFrame = newBlockView.convert(newBlockView.bounds, to: board)
+        let oldFrame = oldBlockView.convert(oldBlockView.bounds, to: board)
+        
+        let dx = newFrame.origin.x - oldFrame.origin.x
+        let dy = newFrame.origin.y - oldFrame.origin.y
+        
+        oldBlockView.image.frame = oldBlockView.image.frame.offsetBy(dx: dx, dy: dy)
+    }
+    
+    func doSwipeAnimations(completion: @escaping () -> ()) {
+        var animations = [() -> ()]()
+        for r in 0..<rows {
+            for c in 0..<columns {
+                let tile = gameModel.matrix[r][c]
+                if tile.number != 0, let pos = tile.oldPosition {
+                    animations.append { [weak self] in
+                        self?.move(row: r, col: c, position: pos)
+                        
+                        if let second = tile.oldPositionMerged {
+                            self?.move(row: r, col: c, position: second)
+                        }
+                    }
+                }
+            }
+        }
+        
+        if animations.isEmpty {
+            updateMatrix()
+            completion()
+        } else {
+            UIView.animate(withDuration: 0.2) {
+                for animation in animations {
+                    animation()
+                }
+            } completion: { [weak self] _ in
+                self?.updateMatrix()
+                completion()
+            }
+        }
+    }
+    
+    func doGenerationAnimations(completion: @escaping () -> ()) {
+        if let pos = gameModel.checkAndGenerate() {
+            let tile = gameModel.matrix[pos.row][pos.col]
+            let blockView = gameMatrix[pos.row][pos.col]
+
+            if let image = UIImage(named: "\(tile.number)") {
+                let frame = blockView.bounds
+                blockView.image.image = image
+                blockView.image.frame = blockView.image.frame.insetBy(dx: frame.width / 2, dy: frame.height / 2)
+                
+                UIView.animate(withDuration: 0.2) {
+                    blockView.image.frame = frame
+                } completion: { [weak self] _ in
+                    self?.updateMatrix()
+                    completion()
+                }
+            }
+        } else {
+            updateMatrix()
+            completion()
         }
     }
     
@@ -306,6 +370,11 @@ final class UIGameBoardController: UIViewController {
                 gameMatrix[row][col].image.image = nil
             }
         }
+        UserDefaults.standard.removeObject(forKey: "savedBestScore")
+        UserDefaults.standard.removeObject(forKey: "savedMatrix")
+        UserDefaults.standard.removeObject(forKey: "MaxTile")
+        UserDefaults.standard.removeObject(forKey: "CurrentScore")
+
         updateMatrix()
         gameModel.generateNewNumberForMatrix()
         gameModel.generateNewNumberForMatrix()
@@ -342,6 +411,8 @@ final class UIGameBoardController: UIViewController {
     func updateMatrix() {
         for row in 0..<rows {
             for col in 0..<columns  {
+                gameMatrix[row][col].image.frame = gameMatrix[row][col].bounds
+                
                 if gameModel.matrix[row][col].number != 0 {
                     let block = gameMatrix[row][col]
                     if let image = UIImage(named: "\(gameModel.matrix[row][col].number)") {
@@ -421,5 +492,18 @@ final class UIGameBoardController: UIViewController {
         lostBar = overlayView
         //adding behaviour to the button
         button.addTarget(self, action: #selector(restarting), for: .touchUpInside)
+    }
+    
+    func winOrLose() {
+        if gameModel.maxTile == 2048 {
+            createWinBar()
+        }
+        scoresTracking()
+        updateMatrix()
+        
+        //checking whether the game needs to be teminated or not (Lose! or continue)
+        if gameModel.needToTerminate() && gameModel.emptyCoordinates.isEmpty {
+            createLostBar()
+        }
     }
 }

@@ -36,12 +36,12 @@
                                 <rect key="frame" x="0.0" y="44" width="414" height="818"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="43" translatesAutoresizingMaskIntoConstraints="NO" id="ags-vs-XmO">
-                                        <rect key="frame" x="123" y="303" width="168" height="212"/>
+                                        <rect key="frame" x="126.66666666666669" y="304.66666666666669" width="161" height="209.00000000000006"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UHW-zV-Nb4">
-                                                <rect key="frame" x="0.0" y="0.0" width="168" height="42"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="161" height="41"/>
                                                 <color key="backgroundColor" red="0.76314835700000005" green="0.65294927729999996" blue="0.47018901349999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="KEEP GOING">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -51,9 +51,9 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="H5h-36-aQc">
-                                                <rect key="frame" x="0.0" y="85" width="168" height="42"/>
+                                                <rect key="frame" x="0.0" y="84" width="161" height="41"/>
                                                 <color key="backgroundColor" red="0.76314835700000005" green="0.65294927729999996" blue="0.47018901349999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="NEW GAME">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -63,9 +63,9 @@
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="G8d-J3-RzR">
-                                                <rect key="frame" x="0.0" y="170" width="168" height="42"/>
+                                                <rect key="frame" x="0.0" y="167.99999999999994" width="161" height="41"/>
                                                 <color key="backgroundColor" red="0.76314835700000005" green="0.65294927729999996" blue="0.47018901349999997" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="25"/>
+                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="24"/>
                                                 <inset key="imageEdgeInsets" minX="0.0" minY="0.0" maxX="2.2250738585072014e-308" maxY="0.0"/>
                                                 <state key="normal" title="HOW TO PLAY">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -77,7 +77,7 @@
                                         </subviews>
                                     </stackView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Menu" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="t9P-ej-A2a">
-                                        <rect key="frame" x="162.66666666666666" y="232.33333333333331" width="89" height="40.666666666666686"/>
+                                        <rect key="frame" x="162.66666666666666" y="234" width="89" height="40.666666666666686"/>
                                         <fontDescription key="fontDescription" type="boldSystem" pointSize="34"/>
                                         <color key="textColor" red="0.76314835695876293" green="0.65294927725685914" blue="0.47018901353044923" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                         <nil key="highlightedColor"/>
@@ -103,6 +103,11 @@
                     </view>
                     <navigationItem key="navigationItem" id="wbT-9a-PRS"/>
                     <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="howToPlay" destination="G8d-J3-RzR" id="FZc-jw-yqZ"/>
+                        <outlet property="keepGoingButton" destination="UHW-zV-Nb4" id="sJT-Q9-P2y"/>
+                        <outlet property="newGame" destination="H5h-36-aQc" id="5ul-FT-XZc"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
