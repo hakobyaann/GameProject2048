@@ -14,16 +14,6 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpView()
-    }
-    
-    func setUpView() {
-        newGame.layer.cornerRadius = 10 // Adjust the corner radius value as needed
-        newGame.layer.masksToBounds = true
-        howToPlay.layer.cornerRadius = 10
-        howToPlay.layer.masksToBounds = true
-        keepGoingButton.layer.cornerRadius = 10
-        keepGoingButton.layer.masksToBounds = true
     }
     
     @IBAction func keepGoing(_ sender: Any) {
