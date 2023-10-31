@@ -249,7 +249,7 @@ Rules
                                                 </connections>
                                             </button>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Join the numbers and get to the 2048 tile!" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sWa-07-eeS">
-                                                <rect key="frame" x="20" y="149" width="351.66666666666669" height="30"/>
+                                                <rect key="frame" x="20" y="149" width="364" height="30"/>
                                                 <fontDescription key="fontDescription" type="system" weight="semibold" pointSize="18"/>
                                                 <color key="textColor" red="0.65075242339999995" green="0.53659983919999998" blue="0.37530771060000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <color key="highlightedColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -288,6 +288,7 @@ Rules
                                             <constraint firstItem="idX-6T-VLF" firstAttribute="width" secondItem="TSY-Op-E2Q" secondAttribute="width" id="Ouc-Vr-il7"/>
                                             <constraint firstItem="JWH-OT-3oU" firstAttribute="bottom" secondItem="dT8-oT-duC" secondAttribute="bottom" id="dYv-QS-Fif"/>
                                             <constraint firstItem="TSY-Op-E2Q" firstAttribute="top" secondItem="dT8-oT-duC" secondAttribute="top" id="e7b-Qb-2fT"/>
+                                            <constraint firstItem="JWH-OT-3oU" firstAttribute="trailing" secondItem="sWa-07-eeS" secondAttribute="trailing" id="ivg-3m-D0x"/>
                                             <constraint firstItem="JWH-OT-3oU" firstAttribute="height" secondItem="sWa-07-eeS" secondAttribute="height" id="oCo-Xi-oat"/>
                                             <constraint firstItem="sWa-07-eeS" firstAttribute="leading" secondItem="dT8-oT-duC" secondAttribute="leading" id="pWH-BB-qjc"/>
                                             <constraint firstItem="idX-6T-VLF" firstAttribute="top" secondItem="dT8-oT-duC" secondAttribute="top" id="r0f-rA-3LF"/>

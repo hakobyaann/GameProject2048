@@ -86,6 +86,10 @@
 		957BA8422AB8943B0070C5FF = {
 			isa = PBXGroup;
 			children = (
+				9584A2E22AF153FF00DB3555 /* Model */,
+				9584A2E52AF1545300DB3555 /* View */,
+				9584A2E32AF1541000DB3555 /* Controller */,
+				9584A2E42AF1542C00DB3555 /* Storyboard */,
 				957BA84D2AB8943B0070C5FF /* GameProject2048 */,
 				957BA8642AB8943D0070C5FF /* GameProject2048Tests */,
 				957BA86E2AB8943D0070C5FF /* GameProject2048UITests */,
@@ -106,17 +110,12 @@
 		957BA84D2AB8943B0070C5FF /* GameProject2048 */ = {
 			isa = PBXGroup;
 			children = (
+				959656A72AC456CD004ADEBF /* UIGameBoardController.swift */,
 				957BA84E2AB8943B0070C5FF /* AppDelegate.swift */,
 				05899DD12AC5E26A0099D5EE /* .gitignore.md */,
 				957BA8502AB8943B0070C5FF /* SceneDelegate.swift */,
-				957BA8522AB8943B0070C5FF /* ViewController.swift */,
-				959656A52AC43579004ADEBF /* UIViewBlock.swift */,
-				959656A72AC456CD004ADEBF /* UIGameBoardController.swift */,
-				957BA8542AB8943B0070C5FF /* Main.storyboard */,
 				957BA8572AB8943D0070C5FF /* Assets.xcassets */,
-				957BA8592AB8943D0070C5FF /* LaunchScreen.storyboard */,
 				957BA85C2AB8943D0070C5FF /* Info.plist */,
-				0565DF0F2AC1DC610052B08E /* GameModel.swift */,
 			);
 			path = GameProject2048;
 			sourceTree = "<group>";
@@ -136,6 +135,39 @@
 				957BA8712AB8943D0070C5FF /* GameProject2048UITestsLaunchTests.swift */,
 			);
 			path = GameProject2048UITests;
+			sourceTree = "<group>";
+		};
+		9584A2E22AF153FF00DB3555 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				0565DF0F2AC1DC610052B08E /* GameModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		9584A2E32AF1541000DB3555 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				957BA8522AB8943B0070C5FF /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		9584A2E42AF1542C00DB3555 /* Storyboard */ = {
+			isa = PBXGroup;
+			children = (
+				957BA8592AB8943D0070C5FF /* LaunchScreen.storyboard */,
+				957BA8542AB8943B0070C5FF /* Main.storyboard */,
+			);
+			path = Storyboard;
+			sourceTree = "<group>";
+		};
+		9584A2E52AF1545300DB3555 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				959656A52AC43579004ADEBF /* UIViewBlock.swift */,
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
